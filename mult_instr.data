@@ -1,0 +1,43 @@
+// ECE:3350 SISC Processor Project - Multiplication Program
+// Multiplies two unsigned 32-bit integers
+// Multiplier is stored at memory location 0
+// Multiplicand is stored at memory location 1
+// The 64-bit result is stored at memory locations 2 (low 32 bits) and 3 (high 32 bits)
+
+// Register usage:
+// R1 - Multiplier (from memory location 0)
+// R2 - Multiplicand (from memory location 1)
+// R3 - Result Low 32 bits
+// R4 - Result High 32 bits (for the 64-bit result)
+// R5 - Loop counter (32 iterations)
+// R6 - Temporary register
+
+A0100000 // 00: LDA  R1,#0      R1 <- M[0]          Load multiplier from memory location 0
+A0200001 // 01: LDA  R2,#1      R2 <- M[1]          Load multiplicand from memory location 1
+
+11300000 // 02: ADD  R3,R0,R0   R3 <- R0 + R0       Initialize result low = 0
+11400000 // 03: ADD  R4,R0,R0   R4 <- R0 + R0       Initialize result high = 0
+21500020 // 04: ADI  R5,R0,#32  R5 <- R0 + 32       Set loop counter to 32 (32-bit multiplication)
+
+LOOP:
+1A331001 // 05: SHR  R3,R3,R1   R3 <- R3 >> [R1&0x1F]  Shift result low right by 1
+1D431000 // 06: RRC  R4,R3,R0   C,R4 <- C,R4 >> 1   Rotate right with carry (shift high part with carry)
+
+11600000 // 07: ADD  R6,R0,R0   R6 <- R0 + R0       Clear R6
+11111000 // 08: ADD  R1,R1,R1   Check LSB of multiplier using the carry out
+70000002 // 09: BNR  C,SKIP     If LSB of multiplier is 0, skip addition
+
+11364000 // 0A: ADD  R3,R6,R4   R3 <- R6 + R4       Add multiplicand to high part of result
+11422000 // 0B: ADD  R4,R2,R0   R4 <- R2 + R0       Update high part
+
+SKIP:
+1B222001 // 0C: SHL  R2,R2,R1   R2 <- R2 << 1       Shift multiplicand left by 1
+2155FFFF // 0D: ADI  R5,R5,#-1  R5 <- R5 - 1        Decrement loop counter
+12505000 // 0E: SUB  R5,R0,R5   Check if loop counter is 0
+70000FF6 // 0F: BNR  Z,LOOP     If loop counter != 0, repeat loop
+
+// Store the result in memory
+B0300002 // 10: STA  R3,#2      M[2] <- R3          Store low 32 bits at location 2
+B0400003 // 11: STA  R4,#3      M[3] <- R4          Store high 32 bits at location 3
+
+F0000000 // 12: HLT                                 Halt execution

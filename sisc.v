@@ -1,0 +1,111 @@
+// ECE:3350 SISC processor project
+// main SISC module, part 1
+
+`timescale 1ns/100ps  
+
+module sisc (clk, rst_f);
+// declar inputs
+  input clk, rst_f; // clock reset active low
+  
+
+// declare all internal wires here
+// PART 1 WIRES--------------
+  wire [3:0]  alu_op; // ALU_OP 4 bits
+  wire        wb_sel;
+  wire        rf_we;
+  wire [31:0] write_data;
+  wire [31:0] alu_result;
+  wire [3:0]  alu_cc;
+  wire [3:0]  stat_en;
+  wire [3:0]  stat;
+  wire [31:0] rsa;
+  wire [31:0] rsb;
+  wire        c_in;
+  wire [3:0]  funct;
+// PART 2 WIRES ---------------
+  wire        br_sel;
+  wire        pc_rst;
+  wire        pc_write;
+  wire        pc_sel;
+  wire        ir_load;
+  wire [15:0] pc_out;
+  wire [15:0] br_out;
+  wire [31:0] ir_out;
+  wire [31:0] im_out;
+
+// PART 3 WIRES ---------------
+  wire 	       rb_sel; // ctrl -> mux4
+  wire [3:0]	       m4_out; // mux4- > RF
+  wire [15:0]  m16_out; // mux16 -> DM Read_Addr, mux 16 -> DM Write_ADdr
+  wire 	       dm_we; // CTRl -> DM 
+  wire [31:0]  read_data; // ??? in DM ig, check file
+  wire 	       mm_sel; // ctrl -> mux16
+
+
+// PART 1 MODULES ---------------
+ctrl u1(clk, rst_f, ir_out[31:28], ir_out[27:24], stat, rf_we, alu_op, wb_sel, br_sel, pc_rst, pc_write, pc_sel, ir_load, rb_sel, mm_sel, dm_we); //EDIT?
+// rb_sel = output to mux mux4
+// mm_sel = output to mux16
+// dm_we = output to DM
+// 
+rf u2(clk, ir_out[19:16], m4_out, ir_out[23:20], write_data, rf_we, rsa, rsb); // good
+alu u3(clk, rsa, rsb, ir_out[15:0], ir_out[3], alu_op, ir_out[27:24], alu_result, alu_cc, stat_en);
+mux32 u5(alu_result, read_data, wb_sel, write_data); // changed in_a, BANG
+statreg u6(clk, alu_cc, stat_en, stat);
+//-------------------------------
+
+//PART 2 MODULES ----------------
+pc u7(clk, br_out, pc_sel, pc_write, pc_rst, pc_out);
+br u8(pc_out, ir_out[15:0], br_sel, br_out);
+ir u9(clk, ir_load, im_out, ir_out);
+im u10(pc_out, im_out);
+
+
+/*Changes from part 2-> 3:
+ - MUX4 is added
+	- inputs: instruction [23:20}, instruction [15:12]
+	- output -> Reg. B of RF unit
+
+ - Modifiy: dm.v, mux4.v and mux16.v
+	- dm.v: 
+
+*/
+
+/* part 3 module file headers:
+module mux4 (in_a, in_b, sel, out);
+module mux16 (in_a, in_b, sel, out);
+module dm (read_addr, write_addr, write_data, dm_we, read_data);
+*/
+
+
+//PART 3 MODULES ----------------
+
+mux4 u11(ir_out[15:12],ir_out[23:20], rb_sel, m4_out); // BANG
+mux16 u12( alu_result[15:0], ir_out[15:0],  mm_sel, m16_out); // BANG
+//mux16 u12(ir_out[15:0], alu_result[31:16],  mm_sel, m16_out); // BANG
+dm u13(m16_out, m16_out, rsb, dm_we, read_data);
+
+//vlog alu.v im.v pc.v br.v rf.v sisc_tb_p2-4.v ctrl.v ir.v sisc.v mux32.v
+
+  initial
+  
+//PART 1 MONITOR STATEMENT---------
+/*$monitor("IR=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%h, RF_WE=%h, write_data=%h", 
+             ir, u2.ram_array[1], u2.ram_array[2], u2.ram_array[3], u2.ram_array[4], u2.ram_array[5], 
+             alu_op, wb_sel, rf_we, write_data);*/
+//PART 2 MONITOR STATEMENT---------
+/* $monitor("IR=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%h, RF_WE=%h, write_data=%h, BR_SEL=%h, PC_RST=%h, PC_WRITE=%h, PC_SEL=%h, IR_LOAD=%h, PC_OUT=%h, BR_OUT=%h, IR_OUT=%h, IM_OUT=%h", 
+             ir_out, u2.ram_array[1], u2.ram_array[2], u2.ram_array[3], u2.ram_array[4], u2.ram_array[5], 
+             alu_op, wb_sel, rf_we, write_data, br_sel, pc_rst, pc_write, pc_sel, ir_load, pc_out, br_out, im_out);*/
+//PART 3 MONITOR STATEMENT FOE -----------
+
+$monitor("IR=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%h, RF_WE=%h, write_data=%h, BR_SEL=%h, PC_RST=%h, PC_WRITE=%h, PC_SEL=%h, IR_LOAD=%h, PC_OUT=%h, BR_OUT=%h, IR_OUT=%h, IM_OUT=%h, RB_SEL=%h, MM_SEL=%h, DM_WE=%h, READ_DATA=%h", 
+             ir_out, u2.ram_array[1], u2.ram_array[2], u2.ram_array[3], u2.ram_array[4], u2.ram_array[5], 
+             alu_op, wb_sel, rf_we, write_data, br_sel, pc_rst, pc_write, pc_sel, ir_load, pc_out, br_out, ir_out, im_out, rb_sel, mm_sel, dm_we, read_data);
+
+
+
+endmodule
+
+
+
