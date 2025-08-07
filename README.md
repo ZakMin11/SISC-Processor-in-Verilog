@@ -1,15 +1,15 @@
-Simple Instruction Set Computer (SISC) Project
+#Simple Instruction Set Computer (SISC) Project#
 A complete implementation of a simple instruction set computer designed for ECE:3350 Computer Architecture and Organization course. This project demonstrates fundamental concepts of computer architecture including datapath design, control unit implementation, instruction execution, and memory systems.
-Project Overview
+##Project Overview##
+
 The SISC project is implemented in Verilog and consists of three progressive parts:
 
-Part 1: Basic datapath with ALU operations and register file
-Part 2: Program counter control, instruction memory, and branch execution
-Part 3: Data memory integration and load/store instructions, plus custom programs
+###Part 1: Basic datapath with ALU operations and register file###
+###Part 2: Program counter control, instruction memory, and branch execution###
+###Part 3: Data memory integration and load/store instructions, plus custom programs###
 
-Architecture Features
-Supported Instructions
-Part 1 Instructions (R-type and Immediate)
+##Architecture Features##
+###Part 1 Instructions (R-type and Immediate)###
 
 NOP: No operation
 ADD: Register addition
@@ -25,19 +25,19 @@ SHFR: Shift right
 SHFL: Shift left
 HLT: Halt execution
 
-Part 2 Instructions (Branch)
+###Part 2 Instructions (Branch)###
 
 Branch instructions with program counter control
 Conditional and unconditional branches
 
-Part 3 Instructions (Memory)
+###Part 3 Instructions (Memory)###
 
 LDX: Load from memory (indexed)
 LDA: Load from memory (absolute)
 STX: Store to memory (indexed)
 STA: Store to memory (absolute)
 
-System Components
+###System Components###
 
 ALU: Arithmetic Logic Unit with multiple operations
 Register File: 32-bit registers with dual read ports
@@ -48,37 +48,38 @@ Data Memory: Data storage and retrieval
 Branch Unit: Branch target calculation
 Multiplexers: Data path routing
 
-File Structure
-├── alu.v              # Arithmetic Logic Unit
-├── br.v               # Branch unit
-├── ctrl.v             # Control unit (FSM implementation)
-├── dm.v               # Data memory module
-├── im.v               # Instruction memory module
-├── ir.v               # Instruction register
-├── mux4.v             # 4-to-1 multiplexer
-├── mux16.v            # 16-to-1 multiplexer
-├── mux32.v            # 32-to-1 multiplexer
-├── pc.v               # Program counter
-├── rf.v               # Register file
-├── sisc.v             # Top-level SISC module
-├── statreg.v          # Status register
-├── sisc_tb_p1.v       # Part 1 testbench
-├── sisc_tb_p2.v       # Part 2 testbench
-├── sisc_tb_p3.v       # Part 3 testbench
-├── imem.data          # Instruction memory data
-├── dmem.data          # Data memory data
-├── sort_data.data     # Test data for sorting
-├── sort_instr.data    # Bubble sort program
-├── mult_data.data     # Test data for multiplication
-├── mult_instr.data    # Multiplication program
-└── work/              # ModelSim compilation directory
-Getting Started
-Prerequisites
+###File Structure###<br />
+├── alu.v              # Arithmetic Logic Unit<br />
+├── br.v               # Branch unit<br />
+├── ctrl.v             # Control unit (FSM implementation)<br />
+├── dm.v               # Data memory module<br />
+├── im.v               # Instruction memory module<br />
+├── ir.v               # Instruction register<br />
+├── mux4.v             # 4-to-1 multiplexer<br />
+├── mux16.v            # 16-to-1 multiplexer<br />
+├── mux32.v            # 32-to-1 multiplexer<br />
+├── pc.v               # Program counter<br />
+├── rf.v               # Register file<br />
+├── sisc.v             # Top-level SISC module<br />
+├── statreg.v          # Status register<br />
+├── sisc_tb_p1.v       # Part 1 testbench<br />
+├── sisc_tb_p2.v       # Part 2 testbench<br />
+├── sisc_tb_p3.v       # Part 3 testbench<br />
+├── imem.data          # Instruction memory data<br />
+├── dmem.data          # Data memory data<br />
+├── sort_data.data     # Test data for sorting<br />
+├── sort_instr.data    # Bubble sort program<br />
+├── mult_data.data     # Test data for multiplication<br />
+├── mult_instr.data    # Multiplication program<br />
+└── work/              # ModelSim compilation directory<br />
+
+##Getting Started##
+###Prerequisites###
 
 ModelSim (or compatible Verilog simulator)
 Basic understanding of Verilog and computer architecture
 
-Running the Simulation
+###Running the Simulation###
 
 Setup Environment
 bash# Change to project directory
