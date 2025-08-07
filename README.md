@@ -1,15 +1,21 @@
-#Simple Instruction Set Computer (SISC) Project#
+# Simple Instruction Set Computer (SISC) Project
+
 A complete implementation of a simple instruction set computer designed for ECE:3350 Computer Architecture and Organization course. This project demonstrates fundamental concepts of computer architecture including datapath design, control unit implementation, instruction execution, and memory systems.
-##Project Overview##
+
+## Project Overview
 
 The SISC project is implemented in Verilog and consists of three progressive parts:
 
-###Part 1: Basic datapath with ALU operations and register file###
-###Part 2: Program counter control, instruction memory, and branch execution###
-###Part 3: Data memory integration and load/store instructions, plus custom programs###
+### Part 1: Basic datapath with ALU operations and register file
 
-##Architecture Features##
-###Part 1 Instructions (R-type and Immediate)###
+### Part 2: Program counter control, instruction memory, and branch execution
+
+### Part 3: Data memory integration and load/store instructions, plus custom programs
+
+
+## Architecture Features
+
+### Part 1 Instructions (R-type and Immediate)
 
 NOP: No operation
 ADD: Register addition
@@ -25,19 +31,19 @@ SHFR: Shift right
 SHFL: Shift left
 HLT: Halt execution
 
-###Part 2 Instructions (Branch)###
+### Part 2 Instructions (Branch)
 
 Branch instructions with program counter control
 Conditional and unconditional branches
 
-###Part 3 Instructions (Memory)###
+### Part 3 Instructions (Memory)
 
 LDX: Load from memory (indexed)
 LDA: Load from memory (absolute)
 STX: Store to memory (indexed)
 STA: Store to memory (absolute)
 
-###System Components###
+### System Components
 
 ALU: Arithmetic Logic Unit with multiple operations
 Register File: 32-bit registers with dual read ports
@@ -48,7 +54,7 @@ Data Memory: Data storage and retrieval
 Branch Unit: Branch target calculation
 Multiplexers: Data path routing
 
-###File Structure###<br />
+### File Structure<br />
 ├── alu.v              # Arithmetic Logic Unit<br />
 ├── br.v               # Branch unit<br />
 ├── ctrl.v             # Control unit (FSM implementation)<br />
@@ -73,13 +79,13 @@ Multiplexers: Data path routing
 ├── mult_instr.data    # Multiplication program<br />
 └── work/              # ModelSim compilation directory<br />
 
-##Getting Started##
-###Prerequisites###
+## Getting Started
+### Prerequisites
 
 ModelSim (or compatible Verilog simulator)
 Basic understanding of Verilog and computer architecture
 
-###Running the Simulation###
+### Running the Simulation
 
 Setup Environment
 bash# Change to project directory
